@@ -13,14 +13,29 @@
  * Если какие либо функции написаны руками (без использования библиотек) это не является ошибкой
  */
 
+import { allPass, anyPass, equals } from 'ramda';
+
+// const isWhite = (figure) => figure === 'white';
+// const isRed = (figure) => figure === 'red';
+// const isGreen = (figure) => figure === 'green';
+const isWhite = equals('white');
+const isRed = equals('red');
+const isGreen = equals('green');
+const getStar = (star, square, triangle, circle) => star;
+const getSquare = (star, square, triangle, circle) => square;
+const getTriangle = (star, square, triangle, circle) => triangle;
+const getCircle = (star, square, triangle, circle) => circle;
+
 // 1. Красная звезда, зеленый квадрат, все остальные белые.
-export const validateFieldN1 = ({star, square, triangle, circle}) => {
+export const validateFieldN1 = ({ star, square, triangle, circle }) => {
     if (triangle !== 'white' || circle !== 'white') {
         return false;
     }
-
+    console.log(allPass([isRed, isGreen], star, square)(...[star, square, triangle, circle]));
+    // return allPass([star, square]);
     return star === 'red' && square === 'green';
 };
+
 
 // 2. Как минимум две фигуры зеленые.
 export const validateFieldN2 = () => false;
