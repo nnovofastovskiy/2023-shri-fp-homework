@@ -13,12 +13,21 @@
  * Если какие либо функции написаны руками (без использования библиотек) это не является ошибкой
  */
 
-import { allPass, anyPass, compose, equals, not } from 'ramda';
+import { allPass, anyPass, compose, countBy, curry, equals, filter, not } from 'ramda';
 
 // const isWhite = (figure) => figure === 'white';
 // const isRed = (figure) => figure === 'red';
 // const isGreen = (figure) => figure === 'green';
-// const isColor = 
+const isColor = (figure, colour) => {
+    console.log(figure, colour);
+    return equals(figure, colour)
+}
+
+const countColor = (colour, figures) => filter(equals(colour), Object.values(figures)).length;
+
+const curriedCountColour = curry(countColor);
+
+const countColour4 = (colour, figures) => equals(4, curriedCountColour)
 
 const isWhite = equals('white');
 const isNotWhite = compose(not, equals('white'));
@@ -50,9 +59,12 @@ const isCircleWhite = compose(isWhite, getCircle);
 const isCircleBlue = compose(isBlue, getCircle);
 const isCircleGreen = compose(isGreen, getCircle);
 
-const isAllColor = (color) => {
+const isAllColor = (colour) => {
     allPass([
-
+        compose(isColor(colour), getStar),
+        compose(isColor(colour), getSquare),
+        compose(isColor(colour), getTriangle),
+        compose(isColor(colour), getCircle),
     ])
 }
 
@@ -104,14 +116,16 @@ export const validateFieldN8 = (
 );
 
 // 9. Все фигуры зеленые.
-export const validateFieldN9 = (
-    allPass([
-        isStarGreen,
-        isSquareGreen,
-        isTriangleGreen,
-        isCircleGreen
-    ])
-);
+export const validateFieldN9 = (figures) => {
+    // console.log(countColor('green', figures));
+    return equals(4, countColor('green', figures))
+    // allPass([
+    //     compose(isGreen, getStar),
+    //     compose(isGreen, getSquare),
+    //     compose(isGreen, getTriangle),
+    //     compose(isGreen, getCircle),
+    // ])
+};
 
 // 10. Треугольник и квадрат одного цвета (не белого), остальные – любого цвета
 export const validateFieldN10 = () => false;
