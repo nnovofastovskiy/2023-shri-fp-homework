@@ -13,7 +13,7 @@
  * Если какие либо функции написаны руками (без использования библиотек) это не является ошибкой
  */
 
-import { allPass, anyPass, compose, countBy, curry, equals, filter, not } from 'ramda';
+import { allPass, anyPass, compose, countBy, curry, equals, filter, gte, not } from 'ramda';
 
 // const isWhite = (figure) => figure === 'white';
 // const isRed = (figure) => figure === 'red';
@@ -84,10 +84,10 @@ export const validateFieldN1 = (
 
 
 // 2. Как минимум две фигуры зеленые.
-export const validateFieldN2 = () => false;
+export const validateFieldN2 = (figures) => gte(countColor('green', figures), 2);
 
 // 3. Количество красных фигур равно кол-ву синих.
-export const validateFieldN3 = () => false;
+export const validateFieldN3 = (figures) => equals(countColor('red', figures), countColor('blue', figures));
 
 // 4. Синий круг, красная звезда, оранжевый квадрат треугольник любого цвета
 export const validateFieldN4 = (
@@ -102,10 +102,24 @@ export const validateFieldN4 = (
 export const validateFieldN5 = () => false;
 
 // 6. Ровно две зеленые фигуры (одна из зелёных – это треугольник), плюс одна красная. Четвёртая оставшаяся любого доступного цвета, но не нарушающая первые два условия
-export const validateFieldN6 = () => false;
+export const validateFieldN6 = (figures) => {
+    console.log('green', countColor('green', figures));
+    console.log('red', countColor('red', figures));
+    console.log(isStarGreen(figures));
+    console.log(allPass([
+        isStarGreen(figures),
+        equals(2, countColor('green', figures)),
+        equals(1, countColor('red', figures)),
+    ]));
+    return allPass([
+        isStarGreen(figures),
+        equals(2, countColor('green', figures)),
+        equals(1, countColor('red', figures)),
+    ])(figures)
+};
 
 // 7. Все фигуры оранжевые.
-export const validateFieldN7 = () => false;
+export const validateFieldN7 = (figures) => equals(4, countColor('orange', figures));
 
 // 8. Не красная и не белая звезда, остальные – любого цвета.
 export const validateFieldN8 = (
